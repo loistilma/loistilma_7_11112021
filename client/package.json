@@ -4,9 +4,10 @@
   "description": "",
   "private": true,
   "scripts": {
-    "webpack-dev": "webpack serve --config webpack.dev.js --open-app-name 'google-chrome'",
+    "webpack-dev": "webpack serve --config webpack.dev.js --open-app-name 'google-chrome' --stats-error-details",
     "webpack-build": "webpack --config webpack.prod.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "serve -s dist -l 8080",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -15,14 +16,20 @@
     "@babel/core": "^7.16.0",
     "@babel/plugin-proposal-export-default-from": "^7.16.0",
     "@babel/plugin-proposal-throw-expressions": "^7.16.0",
-    "@babel/preset-env": "^7.16.0",
+    "@babel/plugin-transform-runtime": "^7.16.4",
+    "@babel/preset-env": "^7.16.4",
     "@babel/preset-react": "^7.16.0",
+    "@babel/runtime": "^7.16.3",
+    "babel-jest": "^27.3.1",
     "babel-loader": "^8.2.3",
+    "babel-plugin-module-resolver": "^4.1.0",
     "compression-webpack-plugin": "^9.0.0",
     "copy-webpack-plugin": "^9.1.0",
     "css-loader": "^6.5.1",
     "html-webpack-plugin": "^5.5.0",
+    "jest": "^27.3.1",
     "mini-css-extract-plugin": "^2.4.4",
+    "react-test-renderer": "^17.0.2",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.2.5",
     "webpack": "^5.64.0",
@@ -31,9 +38,18 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@mui/material": "^5.1.0",
+    "@emotion/react": "^11.6.0",
+    "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.1.0",
+    "@mui/lab": "^5.0.0-alpha.55",
+    "@mui/material": "^5.1.1",
+    "axios": "^0.24.0",
+    "formik": "^2.2.9",
+    "notistack": "^2.0.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "socket.io-client": "^4.3.2"
+    "react-router-dom": "^6.0.2",
+    "serve": "^13.0.2",
+    "yup": "^0.32.11"
   }
 }

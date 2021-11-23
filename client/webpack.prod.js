@@ -3,7 +3,6 @@ const { merge } = require('webpack-merge')
 // plugins
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const webpackBaseConfig = require('./webpack.config')
 const prodConfig = () => {
@@ -17,7 +16,6 @@ const prodConfig = () => {
             },
             plugins: [
                 new MiniCssExtractPlugin(),
-                new OptimizeCssAssetsPlugin(),
                 new webpack.DefinePlugin({
                     isDevelopment: false,
                     'process.env': {

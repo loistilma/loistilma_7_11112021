@@ -3,8 +3,13 @@ const { merge } = require('webpack-merge')
 const webpackBaseConfig = require('./webpack.config')
 const developmentConfig = () => {
     return merge([
-        {
+        {         
             mode: 'development',
+            devServer: {
+                historyApiFallback: true,
+            },
+            devtool: 'cheap-module-source-map',
+
             plugins: [
                 new webpack.DefinePlugin({
                     isDevelopment: true,
