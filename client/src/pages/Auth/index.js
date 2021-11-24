@@ -1,23 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
-import { Outlet, Link } from 'react-router-dom'
+import { Outlet, Link, useLocation } from 'react-router-dom'
 
 function AuthTabs() {
-    const [value, setValue] = useState(0)
-    const handleChange = (event, newValue) => {
-        setValue(newValue)
-    }
+    const location = useLocation()
     return (
-        <Tabs value={value} onChange={handleChange} aria-label="Navigation">
-            <Tab 
+        <Tabs value={location.pathname} aria-label="Navigation">
+            <Tab
+                value="/login"
                 label="Login" 
                 to="/login" 
                 component={Link} 
             />
             <Tab 
+                value="/register"
                 label="Register" 
                 to="/register" 
                 component={Link}

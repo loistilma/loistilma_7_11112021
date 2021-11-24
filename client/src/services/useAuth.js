@@ -1,15 +1,16 @@
-import React, { useState, useEffect, createContext, useContext } from 'react'
+import React, { useState, createContext, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { server } from '@services/serverRequest'
+import { useSnackbar } from 'notistack'
 
 const UserContext = createContext(null)
 
 function useAuth() {
     const storedJwt = localStorage.getItem('token')
+    const { enqueueSnackbar } = useSnackbar()
     let navigate = useNavigate()
     const [jwt, setJwt] = useState(storedJwt || null)
-    const [error, setError] = useState(null)
-    
+
     //register user
     const registerUser = async (data) => {
         const { username, email, password } = data
@@ -17,8 +18,11 @@ function useAuth() {
             username, email, password
         }).then(res => {
             console.log(res)
-        }).catch((err) => {
-            console.log(err)
+            enqueueSnackbar(res.data.message, { variant: 'success' })
+            navigate('/login')
+        }).catch((error) => {
+            console.log(error)
+            enqueueSnackbar(error.res, { variant: 'error' })
         })
     }
 
@@ -30,18 +34,27 @@ function useAuth() {
         }).then(res => {
             localStorage.setItem('token', res.data.token)
             setJwt(res.data.token)
-            console.log(jwt)
+            enqueueSnackbar(res.data.message, { variant: 'success' })
             navigate('/')
-        }).catch((err) => {
-            console.log(err)
+        }).catch((e) => {
+            console.log(e.response)
+            enqueueSnackbar(e.response.data.message, { variant: 'error' })
         })
+    }
+
+    //logout user
+    const logoutUser = () => {
+        localStorage.removeItem('token')
+        setJwt(null)
+        enqueueSnackbar('Vous êtes déconnecté(e)', { variant: 'success' })
+        navigate('/login')
     }
 
     return {
         jwt,
         registerUser,
         loginUser,
-        error
+        logoutUser
     }
 }
 

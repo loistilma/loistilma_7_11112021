@@ -4,15 +4,13 @@ import InputWithFormik from '@components/InputWithFormik';
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import { useSnackbar } from 'notistack'
 import { loginValidation } from '@schemas/authValidation'
 import { Formik } from 'formik'
 import { sleep } from '@utilities/timeout'
 import useAuth from '@services/useAuth'
 
-export default function CustomForm() {
-    const { enqueueSnackbar } = useSnackbar()
-    const { loginUser, error } = useAuth()
+export default function LoginForm() {
+    const { loginUser } = useAuth()
     return (
         <Formik
             initialValues={{
@@ -21,14 +19,8 @@ export default function CustomForm() {
             }}
             validationSchema={loginValidation}
             onSubmit={async (values) => {
-                try {
-                    await sleep(500)
-                    await loginUser(values)
-
-                } catch (error) {
-                    console.log(error)
-                    enqueueSnackbar('400 Bad Request', { variant: 'error' })
-                }
+                await sleep(500)
+                await loginUser(values)
             }}
         >
             {formik => (

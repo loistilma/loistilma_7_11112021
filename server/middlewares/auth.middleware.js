@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 
 module.exports = (req, res, next) => {
-    const token = req.cookies.token
+    const token = req.headers.authorization.split(' ')[1]
     console.log(token)
     if (!token) {
         res.status(401).send('Unauthorized: No token provided')
@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
             if (err) {
                 res.status(401).send('Unauthorized: Invalid token')
             } else {
-                req.username = decoded.username
+                req.UserId = decoded.UserId
                 next()
             }
         })

@@ -1,6 +1,7 @@
 const db = require('../database/models')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { ErrorHandler } = require('../helpers/error.helper')
 
 exports.register = async (req, res, next) => {
     try {
@@ -9,7 +10,7 @@ exports.register = async (req, res, next) => {
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, 10)
         })
-        res.status(201).json({ message: 'Vous êtes maintenant inscrit !' })
+        res.status(201).json({ message: 'Vous êtes inscrit !' })
     } catch (err) {
         console.log(err)
         //console.log('err.name', err.name)
@@ -24,15 +25,18 @@ exports.login = async (req, res, next) => {
     try {
         const user = await db.User.findOne({ where: { username: req.body.username } })
         if (!user) throw new ErrorHandler(400, 'Utilisateur non trouvé !')
+        //const posts = await db.User.findOne({ where: { username: req.body.username }, include: [{ model: db.Post }] }) //db.Post.findAll({ include: db.User })
+        //console.log(JSON.stringify(posts, null, 2))
+        const checkPassword = await bcrypt.compare(req.body.password, user.password)
+        if (!checkPassword) throw new ErrorHandler(401, 'Mot de passe incorrect !')
 
-        bcrypt.compare(req.body.password, user.password, function (err, isMatch) {
-            if (err) return res.status(500).json({ message: 'Internal Server Error' })
-            if (!isMatch) return res.status(401).json({ message: 'Mot de passe incorrect !' })
-            const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE })
-            return res
-                .status(200)
-                .json({ token: token, message: "Vous êtes maintenant connecté(e)" })
-        })
+        const token = jwt.sign(
+            { UserId: user.id }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: process.env.JWT_EXPIRE }
+        )
+
+        return res.status(200).json({ token: token, message: "Vous êtes connecté(e)" })
 
     } catch (error) {
         next(error)

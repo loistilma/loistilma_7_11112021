@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from '@layouts/Home'
+import NavBar from '@layouts/NavBar'
 import Profile from '@layouts/Profile'
 import PrivateRoute from '@services/PrivateRoute'
 import Login from '@layouts/Login'
@@ -19,7 +19,7 @@ export default function Routers() {
                     <Route path="/register" element={<Register />} />
                 </Route>
                 <Route path="/" element={<PrivateRoute />}>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<NavBar />} />
                     <Route path="/profile" element={<Profile />} />
                 </Route>
             </Routes>
