@@ -10,9 +10,21 @@ export default function usePost() {
 
     // create post
     const createPost = async (data) => {
-        const { title, description } = data
-        return server.post(`/api/posts/`, {
-            title, description
+        const { title, description, file } = data
+        let formData = new FormData()
+        /*
+        Object.keys(title).map((key, value) => {
+            formData.append(key, value)
+        })
+        */
+        formData.append('title', title)
+        formData.append('description', description)
+        formData.append('file', file)
+
+        return server.post(`/api/posts/`, formData, {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
         }).then(res => {
             console.log(res)
             enqueueSnackbar(/*res.data.message*/'Posted', { variant: 'success' })

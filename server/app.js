@@ -5,7 +5,6 @@ const cookieParser = require('cookie-parser')
 const { handleError } = require('./helpers/error.helper')
 
 require('dotenv').config()
-//require('./config/db.config')()
 
 var usersRouter = require('./routes/user.route')
 var postsRouter = require('./routes/post.route')
@@ -18,7 +17,7 @@ app.use(cors({
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-//app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 app.use('/api/auth', usersRouter)
 app.use('/api/posts', postsRouter)

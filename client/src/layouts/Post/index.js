@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import LoadingButton from '@mui/lab/LoadingButton'
 import InputWithFormik from '@components/InputWithFormik'
 import Box from '@mui/material/Box'
@@ -10,12 +10,26 @@ import { sleep } from '@utilities/timeout'
 import usePost from '@services/usePost'
 import { styled } from '@mui/material/styles'
 import Button from '@mui/material/Button'
-/*
-function Thumb () {
-    const [loading, setLoading] = useState(false)
+import Image from '@components/Image'
+
+function Thumb({ file }) {
     const [thumb, setThumb] = useState(undefined)
+    useEffect(() => {
+        if (file) {
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                setThumb(reader.result)
+            }
+            reader.readAsDataURL(file)
+        } else {
+            setThumb(undefined)
+        }
+    }, [file])
+    return (
+        file ? <Image imageSrc={thumb} altText={"Vignette de l'image uploadée"}/> : null
+    )
 }
-*/
+
 const Input = styled('input')({
     display: 'none',
 })
@@ -26,12 +40,14 @@ export default function PostForm() {
         <Formik
             initialValues={{
                 title: '',
-                description: ''
+                description: '',
+                file: ''
             }}
             validationSchema={postValidation}
             onSubmit={async (values) => {
                 await sleep(500)
                 await createPost(values)
+                //console.log(values.file)
             }}
         >
             {formik => (
@@ -58,15 +74,23 @@ export default function PostForm() {
                                 {...formik.getFieldProps('description')}
                             />
                         </Grid>
-                        <Grid container item justifyContent="center">
-                            <label htmlFor="contained-button-file">
-                                <Input accept="image/*" id="contained-button-file" multiple type="file" />
+                        <Grid container item justifyContent="start" sm={6}>
+                            <label htmlFor="file">
+                                <Input
+                                    accept="image/*"
+                                    id="file"
+                                    multiple
+                                    type="file"
+                                    onChange={(event) => { formik.setFieldValue("file", event.currentTarget.files[0]) }}
+                                />
                                 <Button variant="contained" component="span">
                                     Upload
                                 </Button>
                             </label>
                         </Grid>
-
+                        <Grid container item justifyContent="start" sm={6}>
+                            <Thumb file={formik.values.file} />
+                        </Grid>
                         <Grid container item justifyContent="center">
                             <LoadingButton
                                 variant="contained"

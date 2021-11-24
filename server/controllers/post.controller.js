@@ -14,7 +14,7 @@ exports.get = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
     const serverUrl = `${req.protocol}://${req.get('host')}/`
-    //const imagePath = serverUrl + req.file.path
+    const imagePath = serverUrl + req.file.path
     //const newSauce = new Sauce({...JSON.parse(req.body.sauce), imageUrl: imagePath})
 
 
@@ -22,10 +22,12 @@ exports.create = async (req, res, next) => {
         await db.Post.create({
             title: req.body.title,
             description: req.body.description,
+            file: imagePath,
             UserId: req.UserId
         })
         res.status(201).json({ message: 'Post créé !'})
     } catch (error) {
+        console.log(error)
         next(new ErrorHandler(400, 'Erreur lors de la création du post'))
     }
 }
