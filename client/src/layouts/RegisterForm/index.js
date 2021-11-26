@@ -35,6 +35,7 @@ export default function RegisterForm() {
                                 label="Username"
                                 name="username"
                                 id="username"
+                                type="text"
                                 {...formik.getFieldProps('username')}
                             />
                         </Grid>
@@ -43,6 +44,7 @@ export default function RegisterForm() {
                                 label="Email"
                                 name="email"
                                 id="email"
+                                type="email"
                                 {...formik.getFieldProps('email')}
                             />
                         </Grid>
@@ -51,6 +53,7 @@ export default function RegisterForm() {
                                 label="Password"
                                 name="password"
                                 id="password"
+                                type="password"
                                 {...formik.getFieldProps('password')}
                             />
                         </Grid>

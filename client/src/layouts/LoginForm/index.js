@@ -34,6 +34,7 @@ export default function LoginForm() {
                                 label="Username"
                                 name="username"
                                 id="username"
+                                type="text"
                                 {...formik.getFieldProps('username')}
                             />
                         </Grid>
@@ -42,6 +43,7 @@ export default function LoginForm() {
                                 label="Password"
                                 name="password"
                                 id="password"
+                                type="password"
                                 {...formik.getFieldProps('password')}
                             />
                         </Grid>
