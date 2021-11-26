@@ -26,7 +26,7 @@ function Thumb({ file }) {
         }
     }, [file])
     return (
-        file ? <Image imageSrc={thumb} altText={"Vignette de l'image uploadée"}/> : null
+        file ? <Image imageSrc={thumb} altText={"Vignette de l'image uploadée"} /> : null
     )
 }
 
@@ -34,20 +34,22 @@ const Input = styled('input')({
     display: 'none',
 })
 
-export default function PostForm() {
-    const { createPost } = usePost()
+export default function PostForm({ inputsValue, postId }) {
+    const { title, description, file } = inputsValue
+    const { createPost, modifyPost } = usePost()
     return (
         <Formik
             initialValues={{
-                title: '',
-                description: '',
-                file: ''
+                title: title,
+                description: description,
+                file: file
             }}
             validationSchema={postValidation}
             onSubmit={async (values) => {
                 await sleep(500)
-                await createPost(values)
-                //console.log(values.file)
+                inputsValue.title === '' 
+                    ? await createPost(values) 
+                    : await modifyPost(postId, values)
             }}
         >
             {formik => (
@@ -98,7 +100,7 @@ export default function PostForm() {
                                 loading={formik.isSubmitting}
                                 type="submit"
                             >
-                                Submit
+                                Publier
                             </LoadingButton>
                         </Grid>
                     </Grid>

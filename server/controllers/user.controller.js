@@ -25,8 +25,6 @@ exports.login = async (req, res, next) => {
     try {
         const user = await db.User.findOne({ where: { username: req.body.username } })
         if (!user) throw new ErrorHandler(400, 'Utilisateur non trouvé !')
-        //const posts = await db.User.findOne({ where: { username: req.body.username }, include: [{ model: db.Post }] }) //db.Post.findAll({ include: db.User })
-        //console.log(JSON.stringify(posts, null, 2))
         const checkPassword = await bcrypt.compare(req.body.password, user.password)
         if (!checkPassword) throw new ErrorHandler(401, 'Mot de passe incorrect !')
 

@@ -61,7 +61,7 @@ export default function RegisterForm() {
                                 loading={formik.isSubmitting}
                                 type="submit"
                             >
-                                Submit
+                                Inscription
                             </LoadingButton>
                         </Grid>
                     </Grid>

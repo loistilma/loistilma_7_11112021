@@ -4,9 +4,10 @@ import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import MenuIcon from '@mui/icons-material/Menu'
 import useAuth from '@services/useAuth'
+import { Link } from 'react-router-dom'
+import Image from '@components/Image'
+import GroupoLogo from '@assets/images/icon-left-font-monochrome-black.svg'
 
 export default function ButtonAppBar() {
     const { logoutUser } = useAuth()
@@ -14,18 +15,8 @@ export default function ButtonAppBar() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        News
-                    </Typography>
+                    <img src={GroupoLogo} alt={'Logo de grouporama'} width="170" sx={{ flexGrow: 1 }} />
+                    <Button to='/profile' component={Link} color="inherit">Profile</Button>
                     <Button onClick={logoutUser} color="inherit">Logout</Button>
                 </Toolbar>
             </AppBar>

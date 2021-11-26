@@ -52,7 +52,7 @@ export default function LoginForm() {
                                 loading={formik.isSubmitting}
                                 type="submit"
                             >
-                                Submit
+                                Connexion
                             </LoadingButton>
                         </Grid>
                     </Grid>

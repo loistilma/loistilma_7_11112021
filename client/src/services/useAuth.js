@@ -17,7 +17,7 @@ function useAuth() {
         return server.post(`/api/auth/register`, {
             username, email, password
         }).then(res => {
-            console.log(res)
+            //console.log(res)
             enqueueSnackbar(res.data.message, { variant: 'success' })
             navigate('/login')
         }).catch((error) => {
