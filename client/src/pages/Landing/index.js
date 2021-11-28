@@ -1,23 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PostForm from '@layouts/PostForm'
 import CustomCard from '@components/Card'
 import CustomAccordion from '@components/Accordion'
 import Grid from '@mui/material/Grid'
 import usePost from '@services/usePost'
+//import { getPosts } from '@services/usePost'
 import { useParams } from 'react-router-dom'
 
 export default () => {
-    const { posts } = usePost()
+    const { posts, deletePost, createPost, modifyPost } = usePost()
+
     const { postId } = useParams()
     const post = posts.find(p => p.id === parseInt(postId))
     const Cards = () => {
         return (
             <>
                 <CustomAccordion accordionLegend={"Publier du contenu"}>
-                    <PostForm inputsValue={{ title: '', description: '', file: '' }} />
+                    <PostForm inputsValue={{ title: '', description: '', file: '' }} requestFunction={createPost}/>
                 </CustomAccordion>
                 <Grid container spacing={2}>
-                    {posts.map(post => <CustomCard post={post} key={post.id} />)}
+                    {posts.map(post => <CustomCard post={post} key={post.id} handleDelete={() => deletePost(post.id)} cardLink={`/post/${post.id}`} />)}
                 </Grid>
             </>       
             
@@ -27,20 +29,19 @@ export default () => {
         return (
             <>  
                 <CustomAccordion accordionLegend={"Modifier le contenu"}>
-                    <PostForm inputsValue={{ title: post?.title, description: post?.description, file: '' }} postId={postId}/>
+                    <PostForm inputsValue={{ title: post.title, description: post.description, file: '' }} requestFunction={modifyPost} postId={postId}/>
                 </CustomAccordion>
                 <Grid container spacing={2}>
-                    <CustomCard post={post} />
+                    <CustomCard post={post} handleDelete={() => deletePost(post.id)} cardLink={`/post/${post.id}`} />
                 </Grid>
             </>
         )
     }
     return (
         <>
-            {postId
-                ? <Card />
-                : <Cards />
-            }
+            {/*loading && <div>data is loading</div>*/}
+            {postId && <Card />}
+            {!postId && <Cards />}
         </>
     )
 }

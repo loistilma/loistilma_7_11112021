@@ -5,48 +5,60 @@ import { useState, useEffect } from 'react'
 
 export default function usePost() {
     const { enqueueSnackbar } = useSnackbar()
-    const [posts, setPosts] = useState([])
     const navigate = useNavigate()
+    const [fetchData, setFetchData] = useState(true)
+    const [posts, setPosts] = useState([])
+
+    const triggerDataFetch = () => setFetchData(t => !t)
+    
+    useEffect(() => {
+        getPosts()
+    }, [fetchData])
 
     // get posts
-    const getPosts = () => {
-        const fetchData = async () => {
-            const result = await server.get('/api/posts/')
-            //console.log(result.data)
-            setPosts(result.data)
+    const getPosts = async () => {
+        try {
+            const res = await server.get('/api/posts/')
+            //console.log(res.data)
+            setPosts(res.data)
+        } catch (error) {
+            console.log(error)
+            enqueueSnackbar(/*error.res*/'Error', { variant: 'error' })
         }
-        useEffect(() => {
-            fetchData()
+    }
 
-        }, [])
-
-        return posts
+    const toFormData = (title, description, file) => {
+        let formData = new FormData()
+        formData.append('title', title)
+        formData.append('description', description)
+        formData.append('file', file)
+        return formData
     }
 
     // create post
     const createPost = async (data) => {
         const { title, description, file } = data
-        let formData = new FormData()
-        formData.append('title', title)
-        formData.append('description', description)
-        formData.append('file', file)
-        return server
-            .post(`/api/posts/`, formData, { headers: { 'content-type': 'multipart/form-data' } })
-            .then(res => {
-                //console.log(res)
-                enqueueSnackbar(res.data.message, { variant: 'success' })
+        try {
+            const res = await server.post(`/api/posts/`, toFormData(title, description, file), { 
+                headers: { 'content-type': 'multipart/form-data' } 
             })
-            .catch((error) => {
-                console.log(error)
-                enqueueSnackbar(/*error.res*/'Error', { variant: 'error' })
-            })
+            
+            //console.log(res)
+            enqueueSnackbar(res.data.message, { variant: 'success' })
+            triggerDataFetch()
+        } catch (error) {
+            console.log(error)
+            enqueueSnackbar(/*error.res*/'Error', { variant: 'error' })
+        }
     }
 
     // delete post
     const deletePost = async (id) => {
         return server.delete(`/api/posts/${id}`)
             .then(res => {
+                
                 enqueueSnackbar(res.data.message, { variant: 'success' })
+                triggerDataFetch()
             })
             .catch((error) => {
                 console.log(error)
@@ -57,14 +69,11 @@ export default function usePost() {
     // modify posts
     const modifyPost = async (id, data) => {
         const { title, description, file } = data
-        let formData = new FormData()
-        formData.append('title', title)
-        formData.append('description', description)
-        formData.append('file', file)
-
-        return server.put(`/api/posts/${id}`, formData)
+        return server.put(`/api/posts/${id}`, toFormData(title, description, file))
             .then(res => {
+                
                 enqueueSnackbar(res.data.message, { variant: 'success' })
+                triggerDataFetch()
                 navigate('/')
             })
             .catch((error) => {
@@ -72,7 +81,6 @@ export default function usePost() {
                 enqueueSnackbar(/*error.res*/'Error', { variant: 'error' })
             })
     }
-    getPosts()
     return {
         createPost,
         posts,

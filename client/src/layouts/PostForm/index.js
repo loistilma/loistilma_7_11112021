@@ -34,9 +34,9 @@ const Input = styled('input')({
     display: 'none',
 })
 
-export default function PostForm({ inputsValue, postId }) {
+export default function PostForm({ inputsValue, postId, requestFunction }) {
     const { title, description, file } = inputsValue
-    const { createPost, modifyPost } = usePost()
+    //const { createPost, modifyPost } = usePost()
     return (
         <Formik
             initialValues={{
@@ -48,8 +48,8 @@ export default function PostForm({ inputsValue, postId }) {
             onSubmit={async (values) => {
                 await sleep(500)
                 inputsValue.title === '' 
-                    ? await createPost(values) 
-                    : await modifyPost(postId, values)
+                    ? await requestFunction(values)
+                    : await requestFunction(postId, values)
             }}
         >
             {formik => (

@@ -14,13 +14,12 @@ import { dateISOToFR, nameToInitials } from '@utilities/dataFormatter'
 import IconButton from '@mui/material/IconButton';
 import usePost from '@services/usePost'
 
-export default function CustomCard({ post }) {
-    const { deletePost } = usePost()
+export default function CustomCard({ post, handleDelete, cardLink }) {
     const isModified = (post) => {
-        if (post?.createdAt !== post?.updatedAt) {
-            return `Modifié le ${dateISOToFR(post?.updatedAt)}`
+        if (post.createdAt !== post.updatedAt) {
+            return `Modifié le ${dateISOToFR(post.updatedAt)}`
         } else {
-            return `Publié le ${dateISOToFR(post?.createdAt)}`
+            return `Publié le ${dateISOToFR(post.createdAt)}`
         }
     }
     return (
@@ -30,32 +29,32 @@ export default function CustomCard({ post }) {
                     <CardHeader
                         avatar={
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                {nameToInitials(post?.User.username)}
+                                {nameToInitials(post.User.username)}
                             </Avatar>
                         }
                         action={
                             <Menu
-                                handleDelete={() => deletePost(post?.id)}
-                                cardLink={`/post/${post?.id}`}
+                                handleDelete={handleDelete}
+                                cardLink={cardLink}
                             />
                         }
-                        title={post?.User.username}
+                        title={post.User.username}
                         subheader={isModified(post)}
                     />
-                    {post?.file &&
+                    {post.file &&
                         <CardMedia
                             component="img"
                             height="194"
-                            image={post?.file}
-                            alt={`Ìmage publiée par ${post?.User.username}`}
+                            image={post.file}
+                            alt={`Ìmage publiée par ${post.User.username}`}
                         />
                     }
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
-                            {post?.title}
+                            {post.title}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                            {post?.description}
+                            {post.description}
                         </Typography>
                     </CardContent>
                     <CardActions disableSpacing>
