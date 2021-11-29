@@ -6,10 +6,10 @@ const upload = require('../middlewares/upload.middleware')
 const postController = require('../controllers/post.controller')
 
 router.get('/', checkAuth, postController.get)
-router.get('/:id', checkAuth, postController.getById)
+//router.get('/:id', checkAuth, postController.getById)
 router.post('/', checkAuth, upload, postController.create)
 router.put('/:id', checkAuth, upload, postController.modify)
 router.delete('/:id', checkAuth, postController.delete)
-//router.post('/:id/like', checkAuth, saucesController.setLike)
+//router.post('/:id/like', checkAuth, postController.setLike)
 
 module.exports = router

@@ -3,38 +3,30 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { ErrorHandler } = require('../helpers/error.helper')
 
-exports.register = async (req, res, next) => {
+exports.get = async (req, res, next) => {
     try {
-        await db.User.create({
-            username: req.body.username,
-            email: req.body.email,
-            password: bcrypt.hashSync(req.body.password, 10)
+        const user = await db.User.findOne({
+            where: { id: req.params.id, id: req.UserId },
+            attributes: ['username', 'email']
         })
-        res.status(201).json({ message: 'Vous êtes inscrit !' })
-    } catch (err) {
-        console.log(err)
+        if (!user) throw new ErrorHandler(400, 'Utilisateur non trouvé !')
+        res.status(201).json(user)
+    } catch (error) {
+        console.log(error)
         //console.log('err.name', err.name)
         //console.log('err.message', err.message)
         //console.log('err.errors', err.errors)
         //err.errors.map(e => console.log(e.message))
-        //next(error)
+        next(error)
     }
 }
 
-exports.login = async (req, res, next) => {
+exports.delete = async (req, res, next) => {
     try {
-        const user = await db.User.findOne({ where: { username: req.body.username } })
+        const user = await db.User.findOne({ where: { id: req.params.id, id: req.UserId } })
         if (!user) throw new ErrorHandler(400, 'Utilisateur non trouvé !')
-        const checkPassword = await bcrypt.compare(req.body.password, user.password)
-        if (!checkPassword) throw new ErrorHandler(401, 'Mot de passe incorrect !')
-
-        const token = jwt.sign(
-            { UserId: user.id }, 
-            process.env.JWT_SECRET, 
-            { expiresIn: process.env.JWT_EXPIRE }
-        )
-
-        return res.status(200).json({ token: token, message: "Vous êtes connecté(e)" })
+        await user.destroy()
+        return res.status(200).json({ message: "Utilisateur supprimé(e)" })
 
     } catch (error) {
         next(error)

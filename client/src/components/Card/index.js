@@ -12,9 +12,10 @@ import Menu from '@components/Menu'
 import Grid from '@mui/material/Grid'
 import { dateISOToFR, nameToInitials } from '@utilities/dataFormatter'
 import IconButton from '@mui/material/IconButton';
-import usePost from '@services/usePost'
+import useAuth from '@services/useAuth'
 
 export default function CustomCard({ post, handleDelete, cardLink }) {
+    const { user } = useAuth()
     const isModified = (post) => {
         if (post.createdAt !== post.updatedAt) {
             return `Modifié le ${dateISOToFR(post.updatedAt)}`
@@ -32,7 +33,7 @@ export default function CustomCard({ post, handleDelete, cardLink }) {
                                 {nameToInitials(post.User.username)}
                             </Avatar>
                         }
-                        action={
+                        action={(user.id === post.UserId || user.isModerator) &&
                             <Menu
                                 handleDelete={handleDelete}
                                 cardLink={cardLink}

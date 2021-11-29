@@ -6,6 +6,7 @@ const { handleError } = require('./helpers/error.helper')
 
 require('dotenv').config()
 
+var authRouter = require('./routes/auth.route')
 var usersRouter = require('./routes/user.route')
 var postsRouter = require('./routes/post.route')
 
@@ -19,7 +20,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
-app.use('/api/auth', usersRouter)
+app.use('/api/auth', authRouter)
+app.use('/api/users', usersRouter)
 app.use('/api/posts', postsRouter)
 
 app.use((err, req, res, next) => {

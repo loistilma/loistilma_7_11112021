@@ -4,7 +4,7 @@ const checkAuth = require('../middlewares/auth.middleware')
 
 const userController = require('../controllers/user.controller')
 
-router.post('/register', userController.register)
-router.post('/login', userController.login)
+router.get('/:id', checkAuth, userController.get)
+router.delete('/:id', checkAuth, userController.delete)
 
 module.exports = router

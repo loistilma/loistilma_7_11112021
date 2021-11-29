@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography'
 import { postValidation } from '@schemas/postValidation'
 import { Formik } from 'formik'
 import { sleep } from '@utilities/timeout'
-import usePost from '@services/usePost'
 import { styled } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 import Image from '@components/Image'
@@ -15,14 +14,16 @@ import Image from '@components/Image'
 function Thumb({ file }) {
     const [thumb, setThumb] = useState(undefined)
     useEffect(() => {
-        if (file) {
+        if (file === null) {
+            setThumb(undefined)
+        } else if (typeof file === 'object') {
             const reader = new FileReader()
             reader.onloadend = () => {
                 setThumb(reader.result)
             }
             reader.readAsDataURL(file)
-        } else {
-            setThumb(undefined)
+        } else if (typeof file === 'string') {
+            setThumb(file)
         }
     }, [file])
     return (
@@ -34,9 +35,8 @@ const Input = styled('input')({
     display: 'none',
 })
 
-export default function PostForm({ inputsValue, postId, requestFunction }) {
+export default function PostForm({ inputsValue, postId, requestFunction, textButton, formLegend }) {
     const { title, description, file } = inputsValue
-    //const { createPost, modifyPost } = usePost()
     return (
         <Formik
             initialValues={{
@@ -47,7 +47,7 @@ export default function PostForm({ inputsValue, postId, requestFunction }) {
             validationSchema={postValidation}
             onSubmit={async (values) => {
                 await sleep(500)
-                inputsValue.title === '' 
+                inputsValue.title === ''
                     ? await requestFunction(values)
                     : await requestFunction(postId, values)
             }}
@@ -56,7 +56,7 @@ export default function PostForm({ inputsValue, postId, requestFunction }) {
                 <Box component="form" sx={{ p: 4 }} onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
                         <Grid container item>
-                            <Typography>Créer un post</Typography>
+                            <Typography>{formLegend}</Typography>
                         </Grid>
                         <Grid container item justifyContent="center">
                             <InputWithFormik
@@ -100,7 +100,7 @@ export default function PostForm({ inputsValue, postId, requestFunction }) {
                                 loading={formik.isSubmitting}
                                 type="submit"
                             >
-                                Publier
+                                {textButton}
                             </LoadingButton>
                         </Grid>
                     </Grid>

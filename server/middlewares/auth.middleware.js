@@ -11,6 +11,7 @@ module.exports = (req, res, next) => {
                 res.status(401).send('Unauthorized: Invalid token')
             } else {
                 req.UserId = decoded.UserId
+                req.isModerator = decoded.isModerator
                 next()
             }
         })
