@@ -8,18 +8,19 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import EmailIcon from '@mui/icons-material/Email';
-import WorkIcon from '@mui/icons-material/Work';
+
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export default () => {
     const [data, setData] = useState([])
-    const { user } = useAuth()
+    const { user, logoutUser } = useAuth()
     useEffect(async () => {
         const res = await server.get(`/api/users/${user.id}`)
         setData(res.data)
     }, [])
     const handleClick = async () => {
         const res = await server.delete(`/api/users/${user.id}`)
+        await logoutUser()
         console.log(res.data)
     }
     return (

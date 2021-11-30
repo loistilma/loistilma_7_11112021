@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack'
 
 const UserContext = createContext(null)
 
-function useAuth() {
+export default function useAuth() {
     const storedJwt = localStorage.getItem('token')
     const currentUser = localStorage.getItem('user')
     const [jwt, setJwt] = useState(storedJwt || null)
@@ -61,17 +61,4 @@ function useAuth() {
         loginUser,
         logoutUser
     }
-}
-
-export function UserProvider({ children }) {
-    const auth = useAuth()
-    return (
-        <UserContext.Provider value={auth}>
-            {children}
-        </UserContext.Provider>
-    )
-}
-
-export default function UserConsumer() {
-    return useContext(UserContext)
 }
