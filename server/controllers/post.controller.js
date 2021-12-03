@@ -69,11 +69,10 @@ exports.modify = async (req, res, next) => {
 
         if (!post) throw new ErrorHandler(401, 'Post non trouvé')
         const imagePath = req.file ? serverUrl + req.file.path : post.file
-        if (post.file) file.del(post.file)
+        if (req.file) file.del(post.file)
         post.title = req.body.title
         post.description = req.body.description
         post.file = imagePath
-        post.UserId = req.UserId
         await post.save()
         res.status(201).json({ message: 'Post créé !' })
     } catch (error) {
