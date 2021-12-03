@@ -6,10 +6,10 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
+import Avatar from '@components/Avatar';
 import EmailIcon from '@mui/icons-material/Email';
-
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Typography from '@mui/material/Typography';
 
 export default () => {
     const [data, setData] = useState([])
@@ -25,6 +25,7 @@ export default () => {
     }
     return (
         <>
+            <Typography variant="h1" component='h1' sx={{ mb: 3 }}>Informations</Typography>
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 <ListItem>
                     <ListItemAvatar>

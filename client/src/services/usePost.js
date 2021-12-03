@@ -8,7 +8,7 @@ export default function usePost() {
     const navigate = useNavigate()
     const [fetchData, setFetchData] = useState(true)
     const [posts, setPosts] = useState([])
-
+    console.log(posts)
     const triggerDataFetch = () => setFetchData(t => !t)
 
     useEffect(() => {
@@ -76,10 +76,35 @@ export default function usePost() {
         }
         triggerDataFetch()
     }
+    // create comment
+    const createComment = async (id, data) => {
+        const { content } = data
+        try {
+            const res = await server.post(`/api/posts/${id}/comments`, { content })
+            enqueueSnackbar(res.data.message, { variant: 'success' })
+        } catch (e) {
+            console.log(e)
+            enqueueSnackbar(e.response.data.message, { variant: 'error' })
+        }
+        triggerDataFetch()
+    }
+    // delete comment
+    const deleteComment = async (postId, commentId) => {
+        try {
+            const res = await server.delete(`/api/posts/${postId}/comments/${commentId}`)
+            enqueueSnackbar(res.data.message, { variant: 'success' })
+        } catch (e) {
+            console.log(e)
+            enqueueSnackbar(e.response.data.message, { variant: 'error' })
+        }
+        triggerDataFetch()
+    }
     return {
         createPost,
         deletePost,
         modifyPost,
-        posts      
+        posts,
+        createComment,
+        deleteComment,
     }
 }

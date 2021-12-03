@@ -2,25 +2,27 @@ import * as yup from 'yup'
 
 export const registerValidation = yup.object({
     username: yup
-        .string('Enter your username')
-        //.email('Enter a valid username')
-        .required('Username is required'),
+        .string()
+        .min(2, "Le nom d'utilisateur doit contenir plus de 2 caractères")
+        .max(20, "Le nom d'utilisateur doit contenir au maximum 20 caractères")
+        .matches(/^[A-Za-z][A-Za-z0-9]*$/, "Le nom d'utilisateur doit contenir que des lettres et des chiffres")
+        .required("Un nom d'utilisateur est requis"),
     email: yup
-        .string('Enter your email')
-        .email('Enter a valid email')
-        .required('Email is required'),
+        .string()
+        .email("Entrer une adresse email valide")
+        .required("Une adresse email est requise"),
     password: yup
-        .string('Enter your password')
-        //.min(8, 'Password should be of minimum 8 characters length')
-        .required('Password is required'),
+        .string()
+        .min(8, 'Le mot de passe doit contenir au minimum 8 caractères')
+        .max(255, 'Le mot de passe peut contenir au maximum 255 caractères')
+        .required('Un mot de passe est requis'),
 })
 
 export const loginValidation = yup.object({
     username: yup
-        .string('Enter your username')
-        //.email('Enter a valid username')
-        .required('Username is required'),
+        .string()
+        .required("Un nom d'utilisateur est requis"),
     password: yup
-        .string('Enter your password')
-        .required('Password is required'),
+        .string()
+        .required('Un mot de passe est requis'),
 })

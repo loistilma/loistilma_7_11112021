@@ -5,14 +5,14 @@ import Profile from '@layouts/Profile'
 import PrivateRoute from '@services/PrivateRoute'
 import LoginForm from '@layouts/LoginForm'
 import RegisterForm from '@layouts/RegisterForm'
-import Auth from '@pages/Auth'
+import AuthTabs from '@pages/AuthTabs'
 import Landing from '@pages/Landing'
 
 export default function Routers() {
     return (
         <Router>
             <Routes>
-                <Route element={<Auth />}>
+                <Route element={<AuthTabs />}>
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/register" element={<RegisterForm />} />
                 </Route>

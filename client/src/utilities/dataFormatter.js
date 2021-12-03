@@ -1,5 +1,5 @@
 export const dateISOToFR = (date) => {
-    return new Date(date).toLocaleString("fr-FR").replace(",", " à")
+    return new Date(date).toLocaleString("fr-FR").split(",")[0]
 }
 
 export const nameToInitials = (name) => {

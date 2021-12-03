@@ -48,7 +48,7 @@ const StyledMenu = styled((props) => (
         },
     },
 }));
-export default function BasicMenu({ handleDelete, cardLink }) {
+export default function BasicMenu({ deletePost, cardUrl }) {
     
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
@@ -80,11 +80,11 @@ export default function BasicMenu({ handleDelete, cardLink }) {
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                <MenuItem to={cardLink} component={Link} disableRipple>
+                <MenuItem to={cardUrl} component={Link} disableRipple>
                     <EditIcon />
                     Modifier
                 </MenuItem>
-                <MenuItem onClick={handleDelete} disableRipple>
+                <MenuItem onClick={deletePost} disableRipple>
                     <DeleteIcon />
                     Supprimer
                 </MenuItem>

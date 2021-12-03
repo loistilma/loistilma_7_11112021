@@ -1,13 +1,13 @@
 import React from 'react';
-import LoadingButton from '@mui/lab/LoadingButton'
+import LoadingButton from '@components/Button'
 import InputWithFormik from '@components/InputWithFormik';
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { loginValidation } from '@schemas/authValidation'
 import { Formik } from 'formik'
 import { sleep } from '@utilities/timeout'
 import useAuth from '@services/useAuth'
+import Stack from '@mui/material/Stack'
 
 export default function LoginForm() {
     const { loginUser } = useAuth()
@@ -25,39 +25,32 @@ export default function LoginForm() {
         >
             {formik => (
                 <Box component="form" sx={{ p: 4 }} onSubmit={formik.handleSubmit}>
-                    <Grid container spacing={2}>
-                        <Grid container item>
-                            <Typography>Se connecter sur Groupomania</Typography>
-                        </Grid>
-                        <Grid container item justifyContent="center">
-                            <InputWithFormik
-                                label="Username"
-                                name="username"
-                                id="username"
-                                type="text"
-                                {...formik.getFieldProps('username')}
-                            />
-                        </Grid>
-                        <Grid container item justifyContent="center">
-                            <InputWithFormik
-                                label="Password"
-                                name="password"
-                                id="password"
-                                type="password"
-                                {...formik.getFieldProps('password')}
-                            />
-                        </Grid>
-                        <Grid container item justifyContent="center">
-                            <LoadingButton
-                                variant="contained"
-                                color="primary"
-                                loading={formik.isSubmitting}
-                                type="submit"
-                            >
-                                Connexion
-                            </LoadingButton>
-                        </Grid>
-                    </Grid>
+                    <Stack spacing={2}>
+                        <Typography sx={{ color: 'rgba(9, 31, 67, 0.85)' }} variant="h1" component="h1">Se connecter</Typography>
+                        <InputWithFormik
+                            label="Username"
+                            name="username"
+                            id="username"
+                            type="text"
+                            {...formik.getFieldProps('username')}
+                        />
+                        <InputWithFormik
+                            label="Password"
+                            name="password"
+                            id="password"
+                            type="password"
+                            {...formik.getFieldProps('password')}
+                        />
+                        <LoadingButton
+                            variant="contained"
+                            color="primary"
+                            loading={formik.isSubmitting}
+                            type="submit"
+                        >
+                            Connexion
+                        </LoadingButton>
+
+                    </Stack>
                 </Box>
             )}
         </Formik>

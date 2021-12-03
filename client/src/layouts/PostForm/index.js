@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import LoadingButton from '@mui/lab/LoadingButton'
+import LoadingButton from '@components/Button'
 import InputWithFormik from '@components/InputWithFormik'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -8,7 +8,7 @@ import { postValidation } from '@schemas/postValidation'
 import { Formik } from 'formik'
 import { sleep } from '@utilities/timeout'
 import { styled } from '@mui/material/styles'
-import Button from '@mui/material/Button'
+import Button from '@components/Button'
 import Image from '@components/Image'
 
 function Thumb({ file }) {
@@ -35,7 +35,7 @@ const Input = styled('input')({
     display: 'none',
 })
 
-export default function PostForm({ inputsValue, postId, requestFunction, textButton, formLegend }) {
+export default function PostForm({ inputsValue, postId, createPost, modifyPost, textButton, formLegend }) {
     const { title, description, file } = inputsValue
     return (
         <Formik
@@ -48,12 +48,12 @@ export default function PostForm({ inputsValue, postId, requestFunction, textBut
             onSubmit={async (values) => {
                 await sleep(500)
                 inputsValue.title === ''
-                    ? await requestFunction(values)
-                    : await requestFunction(postId, values)
+                    ? await createPost(values)
+                    : await modifyPost(postId, values)
             }}
         >
             {formik => (
-                <Box component="form" sx={{ p: 4 }} onSubmit={formik.handleSubmit}>
+                <Box component="form" sx={{ py: 1 }} onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
                         <Grid container item>
                             <Typography>{formLegend}</Typography>

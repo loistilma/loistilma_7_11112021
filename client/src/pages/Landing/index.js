@@ -2,29 +2,27 @@ import React from 'react'
 import PostForm from '@layouts/PostForm'
 import CustomCard from '@components/Card'
 import CustomAccordion from '@components/Accordion'
-import Grid from '@mui/material/Grid'
 import usePost from '@services/usePost'
 import { useParams } from 'react-router-dom'
+import Typography from '@mui/material/Typography';
 
 export default () => {
-    const { posts, deletePost, createPost, modifyPost } = usePost()
+    const { posts, deletePost, createPost, modifyPost, createComment, deleteComment } = usePost()
 
     const { postId } = useParams()
     const post = posts.find(p => p.id === parseInt(postId))
     const Cards = () => {
         return (
             <>
-                <CustomAccordion accordionLegend={"Publier du contenu"}>
-                    <PostForm 
-                        inputsValue={{ title: '', description: '', file: '' }} 
-                        requestFunction={createPost} 
-                        textButton={'Publier'} 
-                        formLegend={'Créer un post'} 
+                <CustomAccordion accordionLegend={"Cliquer ici pour rédiger un post"}>
+                    <PostForm
+                        inputsValue={{ title: '', description: '', file: '' }}
+                        createPost={createPost}
+                        textButton={'Publier'}
+                        formLegend={'Créer un post'}
                     />
                 </CustomAccordion>
-                <Grid container spacing={2}>
-                    {posts.map(post => <CustomCard post={post} key={post.id} handleDelete={() => deletePost(post.id)} cardLink={`/post/${post.id}`} />)}
-                </Grid>
+                {posts.map(post => <CustomCard post={post} key={post.id} deletePost={() => deletePost(post.id)} cardUrl={`/post/${post.id}`} postId={post.id} createComment={createComment} deleteComment={deleteComment}/>)}
             </>
 
         )
@@ -32,24 +30,22 @@ export default () => {
     const Card = () => {
         return (
             <>
-                <CustomAccordion accordionLegend={"Modifier le contenu"}>
-                    <PostForm 
-                        inputsValue={{ title: post.title, description: post.description, file: post.file }} 
-                        requestFunction={modifyPost} 
-                        postId={postId} 
-                        textButton={'Modifier'} 
-                        formLegend={'Modifier un post'} 
+                <CustomAccordion accordionLegend={"Cliquer ici pour modifier un post"}>
+                    <PostForm
+                        inputsValue={{ title: post.title, description: post.description, file: post.file }}
+                        modifyPost={modifyPost}
+                        postId={postId}
+                        textButton={'Modifier'}
+                        formLegend={'Modifier un post'}
                     />
                 </CustomAccordion>
-                <Grid container spacing={2}>
-                    <CustomCard post={post} handleDelete={() => deletePost(post.id)} cardLink={`/post/${post.id}`} />
-                </Grid>
+                <CustomCard post={post} deletePost={() => deletePost(post.id)} cardUrl={`/post/${post.id}`} deleteComment={deleteComment} />
             </>
         )
     }
     return (
         <>
-            {/*loading && <div>data is loading</div>*/}
+            <Typography variant="h1" component='h1' sx={{mb: 3}}>Publier et partager du contenu entre collègues.</Typography>
             {postId && <Card />}
             {!postId && <Cards />}
         </>

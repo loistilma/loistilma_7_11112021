@@ -5,12 +5,25 @@ const { ErrorHandler } = require('../helpers/error.helper')
 exports.get = async (req, res, next) => {
     try {
         const posts = await db.Post.findAll({
-            include: {
-                model: db.User,
-                attributes: ['username', 'email']
-            },
-            order: [['createdAt', 'DESC']]
+            include: [
+                {
+                    model: db.User,
+                    attributes: ['username', 'email']
+                },
+                {
+                    model: db.Comment,
+                    include: {
+                        model: db.User,
+                        attributes: ['username']
+                    },
+                }
+            ],
+            order: [
+                ['createdAt', 'DESC'],
+                [db.Comment, 'createdAt', 'DESC'],
+            ]
         })
+        //console.log(JSON.stringify(posts))
         if (!posts) throw new ErrorHandler(404, 'Erreur lors de la récupération des posts')
         res.status(200).json(posts)
     } catch (error) {
@@ -74,7 +87,7 @@ exports.delete = async (req, res, next) => {
         const post = req.isModerator
             ? await db.Post.findOne({ where: { id: req.params.id } })
             : await db.Post.findOne({ where: { id: req.params.id, UserId: req.UserId } })
-            
+
         if (!post) throw new ErrorHandler(401, 'Post non trouvé')
         if (post.file) file.del(post.file)
         await post.destroy()

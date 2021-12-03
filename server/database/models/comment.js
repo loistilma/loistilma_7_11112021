@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Post extends Model {
+  class Comment extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.User)
-      this.hasMany(models.Comment)
+      this.belongsTo(models.Post)
     }
   };
-  Post.init({
-    title: {
+  Comment.init({
+    content: {
       type: DataTypes.STRING,
       validate: {
         len: {
@@ -24,30 +24,11 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
     },
-    description: {
-      type: DataTypes.STRING,
-      validate: {
-        len: {
-          args: [2, 255],
-          msg: "Doit avoir une longueur entre 2 et 255 caractères"
-        },
-      },
-    },
-    file: {
-      type: DataTypes.STRING,
-      /*
-      validate: {
-        isUrl: {
-          args: true,
-          msg: "Doit être une url"
-        },
-      },
-      */
-    },
-    UserId: DataTypes.INTEGER
+    UserId: DataTypes.INTEGER,
+    PostId: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'Post',
+    modelName: 'Comment',
   });
-  return Post;
+  return Comment;
 };
