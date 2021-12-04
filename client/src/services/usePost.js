@@ -8,7 +8,7 @@ export default function usePost() {
     const navigate = useNavigate()
     const [fetchData, setFetchData] = useState(true)
     const [posts, setPosts] = useState([])
-    console.log(posts)
+    //console.log(posts)
     const triggerDataFetch = () => setFetchData(t => !t)
 
     useEffect(() => {

@@ -48,7 +48,7 @@ export default function PostForm({ inputsValue, postId, createPost, modifyPost, 
             onSubmit={async (values) => {
                 await sleep(500)
                 inputsValue.title === ''
-                    ? await createPost(values)
+                    ? await createPost(values) 
                     : await modifyPost(postId, values)
             }}
         >
