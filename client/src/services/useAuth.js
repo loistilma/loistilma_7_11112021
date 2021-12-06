@@ -1,6 +1,6 @@
 import React, { useState, createContext, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { server } from '@services/serverRequest'
+import { server } from '@services/axiosServerInstance'
 import { useSnackbar } from 'notistack'
 
 const UserContext = createContext(null)

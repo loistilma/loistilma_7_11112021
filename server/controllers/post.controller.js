@@ -8,7 +8,7 @@ exports.get = async (req, res, next) => {
             include: [
                 {
                     model: db.User,
-                    attributes: ['username', 'email']
+                    attributes: ['username']
                 },
                 {
                     model: db.Comment,
@@ -30,17 +30,25 @@ exports.get = async (req, res, next) => {
         next(error)
     }
 }
-/*
+
 exports.getById = async (req, res, next) => {
     try {
-        const post = await db.Post.findOne({ where: { id: req.params.id } })
+        const post = await db.Post.findOne({
+            where: { id: req.params.id },
+            include: [
+                {
+                    model: db.User,
+                    attributes: ['username']
+                },
+            ]
+        })
         if (!post) throw new ErrorHandler(404, 'Erreur lors de la récupération du post')
         res.status(200).json(post)
     } catch (error) {
         next(error)
     }
 }
-*/
+
 exports.create = async (req, res, next) => {
     const serverUrl = `${req.protocol}://${req.get('host')}/`
     const imagePath = req.file ? serverUrl + req.file.path : null
@@ -69,12 +77,12 @@ exports.modify = async (req, res, next) => {
 
         if (!post) throw new ErrorHandler(401, 'Post non trouvé')
         const imagePath = req.file ? serverUrl + req.file.path : post.file
-        if (req.file) file.del(post.file)
+        if (req.file && post.file !== null) file.del(post.file)
         post.title = req.body.title
         post.description = req.body.description
         post.file = imagePath
         await post.save()
-        res.status(201).json({ message: 'Post créé !' })
+        res.status(201).json({ message: 'Post modifié !' })
     } catch (error) {
         console.log(error)
         next(error)

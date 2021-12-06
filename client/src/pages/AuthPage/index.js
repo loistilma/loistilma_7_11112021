@@ -11,17 +11,6 @@ import Box from '@mui/material/Box'
 
 function AuthTabs() {
     const location = useLocation()
-    /*
-    const styles = {
-        '&.Mui-selected': {
-            color: '#091F43',
-            backgroundColor: 'rgba(253, 45, 1, 0.5)',
-        },
-        '& .MuiTabs-indicator': {
-            backgroundColor: '#091F43',
-        }
-    }
-    */
     return (
         <Tabs value={location.pathname} aria-label="Navigation" variant="fullWidth">
             <Tab

@@ -16,6 +16,11 @@ app.use(cors({
 	origin: process.env.CORS_ORIGIN,
 }))
 
+app.all("*", (req, res, next) => {
+    console.log(req.method, req.originalUrl, res.statusCode)
+    next()
+})
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))

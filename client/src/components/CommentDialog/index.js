@@ -15,9 +15,6 @@ import Box from '@mui/material/Box'
 export default function FormDialog({ open, handleClose, createComment, postId }) {
 
     return (
-        <div>
-
-
             <Dialog open={open} onClose={handleClose} fullWidth>
                 <DialogTitle>Commentaire</DialogTitle>
                 <DialogContent>
@@ -60,10 +57,6 @@ export default function FormDialog({ open, handleClose, createComment, postId })
                         )}
                     </Formik>
                 </DialogContent>
-
             </Dialog>
-
-
-        </div>
     );
 }

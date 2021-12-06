@@ -27,7 +27,7 @@ function Thumb({ file }) {
         }
     }, [file])
     return (
-        file ? <Image imageSrc={thumb} altText={"Vignette de l'image uploadée"} /> : null
+        file ? <Image sx={{ borderRadius: 2 }} imageSrc={thumb} altText={"Vignette de l'image uploadée"} /> : null
     )
 }
 
@@ -35,7 +35,7 @@ const Input = styled('input')({
     display: 'none',
 })
 
-export default function PostForm({ inputsValue, postId, createPost, modifyPost, textButton, formLegend }) {
+export default function PostForm({ inputsValue, postId, createPost, modifyPost }) {
     const { title, description, file } = inputsValue
     return (
         <Formik
@@ -47,8 +47,8 @@ export default function PostForm({ inputsValue, postId, createPost, modifyPost, 
             validationSchema={postValidation}
             onSubmit={async (values) => {
                 await sleep(500)
-                inputsValue.title === ''
-                    ? await createPost(values) 
+                !postId
+                    ? await createPost(values)
                     : await modifyPost(postId, values)
             }}
         >
@@ -56,7 +56,7 @@ export default function PostForm({ inputsValue, postId, createPost, modifyPost, 
                 <Box component="form" sx={{ py: 1 }} onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
                         <Grid container item>
-                            <Typography>{formLegend}</Typography>
+                            <Typography>{!postId ? 'Créer un post' : 'Modifier un post'}</Typography>
                         </Grid>
                         <Grid container item justifyContent="center">
                             <InputWithFormik
@@ -89,9 +89,12 @@ export default function PostForm({ inputsValue, postId, createPost, modifyPost, 
                                     Upload
                                 </Button>
                             </label>
+                            <Typography>{formik.values.file && formik.values.file.name}</Typography>
                         </Grid>
                         <Grid container item justifyContent="start" sm={6}>
-                            <Thumb file={formik.values.file} />
+                            <Box sx={{ width: '100%' }}>
+                                <Thumb file={formik.values.file} />
+                            </Box>
                         </Grid>
                         <Grid container item justifyContent="center">
                             <LoadingButton
@@ -100,7 +103,7 @@ export default function PostForm({ inputsValue, postId, createPost, modifyPost, 
                                 loading={formik.isSubmitting}
                                 type="submit"
                             >
-                                {textButton}
+                                {!postId ? 'Publier' : 'Modifier'}
                             </LoadingButton>
                         </Grid>
                     </Grid>

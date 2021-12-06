@@ -12,11 +12,13 @@ export default ({ ...props }) => {
             borderColor: 'rgba(9, 31, 67, 0.7)',
             borderWidth: 1,
         },
+
         '& input:valid:focus + fieldset': {
             borderColor: 'rgba(9, 31, 67, 0.7)',
             borderLeftWidth: 6,
             padding: '4px !important',
         },
+
     }
     return (
         <>

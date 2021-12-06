@@ -6,6 +6,13 @@ const path = require('path')
 module.exports = () => {
     return merge([
         {
+            entry: path.resolve(__dirname, "./src/index"),
+            output: {
+              path: path.resolve(__dirname, "./dist"),
+              filename: "[name].bundle.js",
+              chunkFilename: "[name].bundle.js",
+              clean: true,
+            },
             module: {
                 rules: [
                     {

@@ -1,19 +1,32 @@
 import { useNavigate } from 'react-router-dom'
-import { server } from '@services/serverRequest'
+import { server } from '@services/axiosServerInstance'
 import { useSnackbar } from 'notistack'
 import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
 export default function usePost() {
+    const { postId } = useParams()
     const { enqueueSnackbar } = useSnackbar()
     const navigate = useNavigate()
     const [fetchData, setFetchData] = useState(true)
     const [posts, setPosts] = useState([])
-    //console.log(posts)
+    const [postById, setPostById] = useState([])
     const triggerDataFetch = () => setFetchData(t => !t)
-
+    
     useEffect(() => {
-        getPosts()
+        if (!postId) {
+            getPosts()
+        }
     }, [fetchData])
+    
+    let isMounted
+    useEffect(() => {
+        isMounted = true
+        if (postId) {
+            getPostById()
+        }
+        return () => { isMounted = false }
+    }, [])
 
     // get posts
     const getPosts = async () => {
@@ -21,6 +34,21 @@ export default function usePost() {
             const res = await server.get('/api/posts/')
             //console.log(res.data)
             setPosts(res.data)
+        } catch (e) {
+            console.log(e)
+            enqueueSnackbar(e.response.data.message, { variant: 'error' })
+        }
+
+    }
+
+    // get post By ID
+    const getPostById = async () => {
+        try {
+            if (isMounted) {
+                const res = await server.get(`/api/posts/${postId}`)
+                //console.log(res.data)
+                setPostById(res.data)
+            }
         } catch (e) {
             console.log(e)
             enqueueSnackbar(e.response.data.message, { variant: 'error' })
@@ -76,10 +104,12 @@ export default function usePost() {
         }
         triggerDataFetch()
     }
+
     // create comment
     const createComment = async (id, data) => {
         const { content } = data
         try {
+            
             const res = await server.post(`/api/posts/${id}/comments`, { content })
             enqueueSnackbar(res.data.message, { variant: 'success' })
         } catch (e) {
@@ -88,6 +118,7 @@ export default function usePost() {
         }
         triggerDataFetch()
     }
+
     // delete comment
     const deleteComment = async (postId, commentId) => {
         try {
@@ -99,11 +130,13 @@ export default function usePost() {
         }
         triggerDataFetch()
     }
+
     return {
         createPost,
         deletePost,
         modifyPost,
         posts,
+        postById,
         createComment,
         deleteComment,
     }

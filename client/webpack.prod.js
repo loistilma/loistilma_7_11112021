@@ -4,6 +4,7 @@ const { merge } = require('webpack-merge')
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const webpackBaseConfig = require('./webpack.config')
 const prodConfig = () => {
     return merge([
@@ -15,6 +16,7 @@ const prodConfig = () => {
                 minimizer: [new TerserPlugin()],
             },
             plugins: [
+                //new BundleAnalyzerPlugin(),
                 new MiniCssExtractPlugin(),
                 new webpack.DefinePlugin({
                     isDevelopment: false,

@@ -8,6 +8,7 @@ exports.get = async (req, res, next) => {
         if (!comments) throw new ErrorHandler(404, 'Erreur lors de la récupération des commentaires')
         res.status(200).json(comments)
     } catch (error) {
+        console.log(error)
         next(error)
     }
 }
@@ -31,7 +32,7 @@ exports.delete = async (req, res, next) => {
         const comment = req.isModerator
             ? await db.Comment.findOne({ where: { PostId: req.params.postId, id: req.params.commentId } })
             : await db.Comment.findOne({ where: { PostId: req.params.postId, id: req.params.commentId, UserId: req.UserId } })
-        console.log(comment)
+        //console.log(comment)
         if (!comment) throw new ErrorHandler(401, 'Commentaire non trouvé')
         await comment.destroy()
         res.status(200).json({ message: 'Commentaire supprimé !' })
